@@ -31,8 +31,13 @@ CREATE TABLE Types (
 """)
 
 ## Insert types
-types_list = [('Bug',), ('Dark',), ('Dragon',), ('Electric',), ('Fairy',), ('Fighting',), ('Fire',), ('Flying',), ('Ghost',), ('Grass',), ('Ground',), ('Ice',), ('Normal',), ('Poison',), ('Psychic',), ('Rock',), ('Steel',), ('Water',), ]
-cursor.executemany("INSERT INTO Types (type_name) VALUES (?);", types_list)
+type_names = [
+        "Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting",
+        "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice",
+        "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"
+    ]
+cursor.executemany("INSERT OR IGNORE INTO Types (type_name) VALUES (?);", [(name,) for name in type_names]
+                  )
 
 ### Connect two types with a relation tag
 cursor.execute("""
@@ -184,6 +189,7 @@ for attacker, defender, relation in matchups:
     """, (attacker, defender, relation))
 
 conn.commit()
+conn.close()
 
 
 ### Get the multiplier between two types
