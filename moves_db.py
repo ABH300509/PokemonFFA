@@ -55,7 +55,7 @@ MOVES_DATA = [
 
 ]
 
-  ief create_moves_table(cursor):
+  def create_moves_table(cursor):
     """Creates the moves in the database"""
     cursor.execute("""
       CREATE TABLE IF NOT EXISTS Moves (
@@ -70,7 +70,7 @@ MOVES_DATA = [
     );
     """)
 
-  ief populate_moves(cursor):
+  def populate_moves(cursor):
   """inserts all moves from MOVE_DATA into the database"""
   for move_name, type_name, category, power, accuracy, pp in MOVES_DATA:
     cursor.execute("""
