@@ -1,51 +1,15 @@
-# PokemonFFA
-import sqlite3
-conn = sqlite3.connect(":memory:")
-cursor = conn.cursor()
-cursor.execute("PRAGMA foreign_keys = ON;")
-
-### Create 'Relation_Types' table (Stores: WEAK, RESIST, IMMUNE)
-cursor.execute("""
-CREATE TABLE Relation_Types (
-    relation_name TEXT PRIMARY KEY,
-    multiplier REAL NOT NULL
-);
-""")
 
 ### Multiplier Rules
-cursor.executemany("""
-INSERT INTO Relation_Types (relation_name, multiplier) 
-VALUES (?, ?);
 """, [
     ('WEAK', 2.0),
     ('RESIST', 0.5),
     ('IMMUNE', 0.0)
 ])
 
-### Create Types Table
-cursor.execute("""
-CREATE TABLE Types (
-    type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type_name TEXT NOT NULL UNIQUE
-);
-""")
 
 ## Insert types
 types_list = [('Bug',), ('Dark',), ('Dragon',), ('Electric',), ('Fairy',), ('Fighting',), ('Fire',), ('Flying',), ('Ghost',), ('Grass',), ('Ground',), ('Ice',), ('Normal',), ('Poison',), ('Psychic',), ('Rock',), ('Steel',), ('Water',), ]
-cursor.executemany("INSERT INTO Types (type_name) VALUES (?);", types_list)
 
-### Connect two types with a relation tag
-cursor.execute("""
-CREATE TABLE Type_Relations (
-    attacker_type_id INTEGER,
-    defender_type_id INTEGER,
-    relation_name TEXT NOT NULL,
-    PRIMARY KEY (attacker_type_id, defender_type_id),
-    FOREIGN KEY (attacker_type_id) REFERENCES Types(type_id),
-    FOREIGN KEY (defender_type_id) REFERENCES Types(type_id),
-    FOREIGN KEY (relation_name) REFERENCES Relation_Types(relation_name)
-);
-""")
 
 ## Matchup Table (Attacker, Defender, Relation tag)
 matchups = [
@@ -172,33 +136,3 @@ matchups = [
     ('Water', 'Water', 'RESIST'),
 ]
 
-#### Translate type names into their database IDs
-for attacker, defender, relation in matchups:
-    cursor.execute("""
-    INSERT INTO Type_Relations (attacker_type_id, defender_type_id, relation_name)
-    VALUES (
-        (SELECT type_id FROM Types WHERE type_name = ?),
-        (SELECT type_id FROM Types WHERE type_name = ?),
-        ?
-    );
-    """, (attacker, defender, relation))
-
-conn.commit()
-
-
-### Get the multiplier between two types
-def get_multiplier(attacker_type, defender_type):
-    query = """
-    SELECT COALESCE(rt.multiplier, 1.0) AS multiplier
-    FROM Types atk
-    CROSS JOIN Types def
-    LEFT JOIN Type_Relations tr 
-        ON tr.attacker_type_id = atk.type_id 
-       AND tr.defender_type_id = def.type_id
-    LEFT JOIN Relation_Types rt 
-        ON tr.relation_name = rt.relation_name
-    WHERE atk.type_name = ? AND def.type_name = ?;
-    """
-    cursor.execute(query, (attacker_type, defender_type))
-    result = cursor.fetchone()
-    return result[0]
