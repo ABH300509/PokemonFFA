@@ -189,7 +189,6 @@ for attacker, defender, relation in matchups:
     """, (attacker, defender, relation))
 
 conn.commit()
-conn.close()
 
 
 ### Get the multiplier between two types
@@ -208,3 +207,5 @@ def get_multiplier(attacker_type, defender_type):
     cursor.execute(query, (attacker_type, defender_type))
     result = cursor.fetchone()
     return result[0]
+
+conn.close()
