@@ -1,4 +1,4 @@
-import sqlite 3
+import sqlite3
 
 # (move name, type, category, power, accuracy, pp)
 
@@ -52,3 +52,33 @@ MOVES_DATA = [
   ('Surf', 'Water', 'Special', 80, 100, 15),
   ('Liquidation', 'Water', 'Physical', 85, 100, 15),
   ('Explosion', 'Normal', 'Physical', 500, 100, 1),
+
+]
+
+  ief create_moves_table(cursor):
+    """Creates the moves in the database"""
+    cursor.execute("""
+      CREATE TABLE IF NOT EXISTS Moves (
+        move_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        move_name TEXT NOT NULL UNIQUE,
+        type_id INTEGER NOT NULL,
+        CATEGORY TEXT NOT NULL CHECK(category IN ('Physical', 'Special)),
+        power INTEGER DEFAULT 0,
+        accuracy INTEGER DEFAULT 100,
+        pp INTEGER NOT NULL,
+        FOREIGN KEY (type_id) REFERENCES Types(type_id)
+    );
+    """)
+
+  ief populate_moves(cursor):
+  """inserts all moves from MOVE_DATA into the database"""
+  for move_name, type_name, category, power, accuracy, pp in MOVES_DATA:
+    cursor.execute("""
+      INSERT OR IGNORE INTO Moves (move_name, type_id, category, power, accuracy, pp_
+      VALUES (
+        ?,
+        (SELECT type_id FROM Types WHERE type_name=?),
+        ?, ?, ?, ?
+        );
+      """, (move_name, type_name, category, power, accuracy, pp))
+
