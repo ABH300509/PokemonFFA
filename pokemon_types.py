@@ -227,5 +227,3 @@ def get_multiplier(attacker_type, defender_type):
     cursor.execute(query, (attacker_type, defender_type))
     result = cursor.fetchone()
     return result[0] if result else 1.0
-
-setup_types_db()
