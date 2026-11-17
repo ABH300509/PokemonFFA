@@ -63,18 +63,18 @@ MOVES_DATA = [
 ]
 
   def create_moves_table(cursor):
-    """Creates the moves in the database"""
-    cursor.execute("""
-      CREATE TABLE IF NOT EXISTS Moves (
-        move_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        move_name TEXT NOT NULL UNIQUE,
-        type_id INTEGER NOT NULL,
-        CATEGORY TEXT NOT NULL CHECK(category IN ('Physical', 'Special')),
-        power INTEGER DEFAULT 0,
-        accuracy INTEGER DEFAULT 100,
-        pp INTEGER NOT NULL,
-        FOREIGN KEY (type_id) REFERENCES Types(type_id)
-    );
+      """Creates the moves in the database"""
+        cursor.execute("""
+          CREATE TABLE IF NOT EXISTS Moves (
+            move_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            move_name TEXT NOT NULL UNIQUE,
+            type_id INTEGER NOT NULL,
+            CATEGORY TEXT NOT NULL CHECK(category IN ('Physical', 'Special')),
+            power INTEGER DEFAULT 0,
+            accuracy INTEGER DEFAULT 100,
+            pp INTEGER NOT NULL,
+            FOREIGN KEY (type_id) REFERENCES Types(type_id)
+        );
     """)
 
   def populate_moves(cursor):
