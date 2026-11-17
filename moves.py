@@ -1,6 +1,11 @@
-from pokemon_types import conn, cursor
-
 import sqlite3
+
+DB_PATH = "pokemon.db"
+
+conn = sqlite3.connect(DB_PATH)
+conn.execute("PRAGMA foreign_keys = ON;")
+cursor = conn.cursor()
+
 
 # (move name, type, category, power, accuracy, pp)
 
@@ -90,3 +95,4 @@ MOVES_DATA = [
 create_moves_table(cursor)
 populate_moves(cursor)
 conn.commit()
+conn.close()
