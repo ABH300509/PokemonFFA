@@ -1,8 +1,11 @@
-# PokemonFFA
 import sqlite3
-conn = sqlite3.connect(":memory:")
+
+DB_PATH = "pokemon.db"
+
+conn = sqlite3.connect(DB_PATH)
+conn.execute("PRAGMA foreign_keys = ON;")
 cursor = conn.cursor()
-cursor.execute("PRAGMA foreign_keys = ON;")
+
 
 ### Create 'Relation_Types' table (Stores: WEAK, RESIST, IMMUNE)
 cursor.execute("""
@@ -60,13 +63,15 @@ matchups = [
     ('Rock', 'Bug', 'WEAK'),
     ('Fighting', 'Bug', 'RESIST'),
     ('Grass', 'Bug', 'RESIST'),
-    ('Ground', 'Bug', 'RESIST'),              
+    ('Ground', 'Bug', 'RESIST'),       
+    
     ('Bug', 'Dark', 'WEAK'),
     ('Fairy', 'Dark', 'WEAK'),
     ('Fighting', 'Dark', 'WEAK'),
     ('Ghost', 'Dark', 'RESIST'),
     ('Dark', 'Dark', 'RESIST'),
     ('Psychic', 'Dark', 'IMMUNE'),
+    
     ('Dragon', 'Dragon', 'WEAK'),
     ('Fairy', 'Dragon', 'WEAK'),
     ('Ice', 'Dragon', 'WEAK'),
@@ -74,22 +79,26 @@ matchups = [
     ('Fire', 'Dragon', 'RESIST'),
     ('Grass', 'Dragon', 'RESIST'),
     ('Water', 'Dragon', 'RESIST'),
+    
     ('Ground', 'Electric', 'WEAK'),
     ('Electric', 'Electric', 'RESIST'),
     ('Flying', 'Electric', 'RESIST'),
     ('Steel', 'Electric', 'RESIST'),
+    
     ('Poison', 'Fairy', 'WEAK'),
     ('Steel', 'Fairy', 'WEAK'),
     ('Bug', 'Fairy', 'RESIST'),
     ('Dark', 'Fairy', 'RESIST'),
     ('Fighting', 'Fairy', 'RESIST'),
     ('Dragon', 'Fairy', 'IMMUNE'),
+    
     ('Fairy', 'Fighting', 'WEAK'),
     ('Flying', 'Fighting', 'WEAK'),
     ('Psychic', 'Fighting', 'WEAK'),
     ('Bug', 'Fighting', 'RESIST'),
     ('Dark', 'Fighting', 'RESIST'),
     ('Rock', 'Fighting', 'RESIST'),
+    
     ('Ground', 'Fire', 'WEAK'),
     ('Rock', 'Fire', 'WEAK'),
     ('Water', 'Fire', 'WEAK'),
@@ -99,6 +108,7 @@ matchups = [
     ('Grass', 'Fire', 'RESIST'),
     ('Ice', 'Fire', 'RESIST'),
     ('Steel', 'Fire', 'RESIST'),
+    
     ('Electric', 'Flying', 'WEAK'),
     ('Ice', 'Flying', 'WEAK'),
     ('Rock', 'Flying', 'WEAK'),
@@ -106,12 +116,14 @@ matchups = [
     ('Fighting', 'Flying', 'RESIST'),
     ('Grass', 'Flying', 'RESIST'),
     ('Ground', 'Flying', 'IMMUNE'),
+    
     ('Dark', 'Ghost', 'WEAK'),
     ('Ghost', 'Ghost', 'WEAK'),
     ('Bug', 'Ghost', 'RESIST'),
     ('Poison', 'Ghost', 'RESIST'),
     ('Fighting', 'Ghost', 'IMMUNE'),
     ('Normal', 'Ghost', 'IMMUNE'),
+    
     ('Bug', 'Grass', 'WEAK'),
     ('Fire', 'Grass', 'WEAK'),
     ('Flying', 'Grass', 'WEAK'),
@@ -121,19 +133,23 @@ matchups = [
     ('Grass', 'Grass', 'RESIST'),
     ('Ground', 'Grass', 'RESIST'),
     ('Water', 'Grass', 'RESIST'),
+    
     ('Grass', 'Ground', 'WEAK'),
     ('Ice', 'Ground', 'WEAK'),
     ('Water', 'Ground', 'WEAK'),
     ('Poison', 'Ground', 'RESIST'),
     ('Rock', 'Ground', 'RESIST'),
     ('Electric', 'Ground', 'IMMUNE'),
+    
     ('Fighting', 'Ice', 'WEAK'),
     ('Fire', 'Ice', 'WEAK'),
     ('Rock', 'Ice', 'WEAK'),
     ('Steel', 'Ice', 'WEAK'),
     ('Ice', 'Ice', 'RESIST'),
+    
     ('Fighting', 'Normal', 'WEAK'),
     ('Ghost', 'Normal', 'IMMUNE'),
+    
     ('Ground', 'Poison', 'WEAK'),
     ('Psychic', 'Poison', 'WEAK'),
     ('Bug', 'Poison', 'RESIST'),
@@ -141,11 +157,13 @@ matchups = [
     ('Fighting', 'Poison', 'RESIST'),
     ('Grass', 'Poison', 'RESIST'),
     ('Poison', 'Poison', 'RESIST'),
+    
     ('Bug', 'Psychic', 'WEAK'),
     ('Dark', 'Psychic', 'WEAK'),
     ('Ghost', 'Psychic', 'WEAK'),
     ('Fighting', 'Psychic', 'RESIST'),
     ('Psychic', 'Psychic', 'RESIST'),
+    
     ('Fighting', 'Rock', 'WEAK'),
     ('Grass', 'Rock', 'WEAK'),
     ('Ground', 'Rock', 'WEAK'),
@@ -155,6 +173,7 @@ matchups = [
     ('Flying', 'Rock', 'RESIST'),
     ('Normal', 'Rock', 'RESIST'),
     ('Poison', 'Rock', 'RESIST'),
+    
     ('Fighting', 'Steel', 'WEAK'),
     ('Fire', 'Steel', 'WEAK'),
     ('Ground', 'Steel', 'WEAK'),
@@ -169,6 +188,7 @@ matchups = [
     ('Rock', 'Steel', 'RESIST'),
     ('Steel', 'Steel', 'RESIST'),
     ('Poison', 'Steel', 'IMMUNE'),
+    
     ('Electric', 'Water', 'WEAK'),
     ('Grass', 'Water', 'WEAK'),
     ('Fire', 'Water', 'RESIST'),
@@ -206,5 +226,6 @@ def get_multiplier(attacker_type, defender_type):
     """
     cursor.execute(query, (attacker_type, defender_type))
     result = cursor.fetchone()
-    return result[0]
+    return result[0] if result else 1.0
 
+setup_types_db()
