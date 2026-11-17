@@ -1,3 +1,5 @@
+from pokemon_types import conn, cursor
+
 import sqlite3
 
 # (move name, type, category, power, accuracy, pp)
@@ -72,13 +74,19 @@ MOVES_DATA = [
 
   def populate_moves(cursor):
   """inserts all moves from MOVE_DATA into the database"""
-  for move_name, type_name, category, power, accuracy, pp in MOVES_DATA:
-    cursor.execute("""
-      INSERT OR IGNORE INTO Moves (move_name, type_id, category, power, accuracy, pp_
-      VALUES (
+  cursor.executemany("""
+        INSERT OR IGNORE INTO Moves
+            (move_name, type_id, category, power, accuracy, pp)
+            VALUES (
         ?,
         (SELECT type_id FROM Types WHERE type_name=?),
         ?, ?, ?, ?
         );
-      """, (move_name, type_name, category, power, accuracy, pp))
+      """, [
+        (move_name, type_name, category, power, accuracy, pp)
+        for move_name, type_name, category, power, accuracy, pp in MOVES_DATA
+    ])
 
+create_moves_table(cursor)
+populate_moves(cursor)
+conn.commit()
