@@ -208,4 +208,3 @@ def get_multiplier(attacker_type, defender_type):
     result = cursor.fetchone()
     return result[0]
 
-conn.close()
