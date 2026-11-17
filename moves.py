@@ -69,7 +69,7 @@ MOVES_DATA = [
         move_id INTEGER PRIMARY KEY AUTOINCREMENT,
         move_name TEXT NOT NULL UNIQUE,
         type_id INTEGER NOT NULL,
-        CATEGORY TEXT NOT NULL CHECK(category IN ('Physical', 'Special)),
+        CATEGORY TEXT NOT NULL CHECK(category IN ('Physical', 'Special')),
         power INTEGER DEFAULT 0,
         accuracy INTEGER DEFAULT 100,
         pp INTEGER NOT NULL,
@@ -78,15 +78,15 @@ MOVES_DATA = [
     """)
 
   def populate_moves(cursor):
-  """inserts all moves from MOVE_DATA into the database"""
-  cursor.executemany("""
-        INSERT OR IGNORE INTO Moves
-            (move_name, type_id, category, power, accuracy, pp)
-            VALUES (
-        ?,
-        (SELECT type_id FROM Types WHERE type_name=?),
-        ?, ?, ?, ?
-        );
+    """inserts all moves from MOVE_DATA into the database"""
+      cursor.executemany("""
+          INSERT OR IGNORE INTO Moves
+               (move_name, type_id, category, power, accuracy, pp)
+              VALUES (
+          ?,
+          (SELECT type_id FROM Types WHERE type_name=?),
+          ?, ?, ?, ?
+          );
       """, [
         (move_name, type_name, category, power, accuracy, pp)
         for move_name, type_name, category, power, accuracy, pp in MOVES_DATA
