@@ -1,4 +1,4 @@
-import sqlite 3
+import sqlite3
 
 DB_PATH = "pokemon.db"
 
@@ -24,23 +24,22 @@ def create_pokemon_table(cursor):
     );
   """)
 
-def insert_pokemon(
-  cursor,
-  pokemon_name,
-  type1_id,
-  type2_id,
-  hp,
-  atk, 
-  defense,
-  spatk,
-  spdf,
-  speed
-):
-cursor.execute("""
-  INSERT OR IGNORE INTO Pokemon (
-    pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed))
+def insert_pokemon(cursor, data):
+    cursor.executemany("""
+        INSERT OR IGNORE INTO Pokemon (
+            pokemon_name,
+            type1_id,
+            type2_id,
+            hp,
+            atk,
+            defense,
+            spatk,
+            spdf,
+            speed
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, data)
+
 create_pokemon_table(cursor)
 POKEMON_DATA = [
   ("Venusaur", 10, 14, 80, 82, 83, 100, 100, 80),
@@ -88,7 +87,7 @@ POKEMON_DATA = [
   ("Kingdra", 18, 3, 100, 135, 120, 60, 85, 50),
   ("Starmie", 18, 15, 60, 75, 85, 100, 85, 115),
   ("Scyther", 1, 8, 70, 110, 80, 55, 80, 105),
-  ("Scizor", 70, 130, 100, 55, 80, 65),
+  ("Scizor", 17, 1, 70, 130, 100, 55, 80, 65),
   ("Electivire", 4, 6, 75, 123, 67, 95, 85, 85),
   ("Magmortar", 7, None, 75, 95, 67, 125, 95, 83),
   ("Mr. Mime", 15, 5, 40, 45, 65, 100, 120, 90),
@@ -105,6 +104,7 @@ POKEMON_DATA = [
   ("Snorlax", 13, None, 160, 110, 65, 65, 110, 30),
   ("Dragonite", 3, 8, 91, 134, 95, 100, 100, 80),
 ] 
+insert_pokemon(cursor, POKEMON_DATA)
 conn.commit()
 conn.close()
           
