@@ -41,7 +41,8 @@ cursor.execute("""
     pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed))
-
+POKEMON_DATA = [
+  ("Venusaur", 
 create_pokemon_table(cursor)
 conn.commit()
 conn.close()
