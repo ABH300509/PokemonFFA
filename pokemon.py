@@ -41,6 +41,7 @@ cursor.execute("""
     pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (pokemon_name, type1_id, type2_id, hp, atk, defense, spatk, spdf, speed))
+create_pokemon_table(cursor)
 POKEMON_DATA = [
   ("Venusaur", 10, 14, 80, 82, 83, 100, 100, 80),
   ("Charizard", 7, 8, 78, 84, 78, 109, 85, 100),
@@ -81,8 +82,29 @@ POKEMON_DATA = [
   ("Hitmonlee", 6, None, 50, 120, 53, 35, 110, 87),
   ("Hitmonchan", 6, None, 50, 105, 79, 35, 110, 76),
   ("Hitmontop", 6, None, 50, 95, 95, 35, 110, 70),
-  
-create_pokemon_table(cursor)
+  ("Weezing", 14, None, 65, 90, 120, 85, 70, 60),
+  ("Rhyperior", 11, 16, 115, 140, 130, 55, 55, 40),
+  ("Blissey", 13, None, 255, 10, 10, 75, 135, 55),
+  ("Kingdra", 18, 3, 100, 135, 120, 60, 85, 50),
+  ("Starmie", 18, 15, 60, 75, 85, 100, 85, 115),
+  ("Scyther", 1, 8, 70, 110, 80, 55, 80, 105),
+  ("Scizor", 70, 130, 100, 55, 80, 65),
+  ("Electivire", 4, 6, 75, 123, 67, 95, 85, 85),
+  ("Magmortar", 7, None, 75, 95, 67, 125, 95, 83),
+  ("Mr. Mime", 15, 5, 40, 45, 65, 100, 120, 90),
+  ("Tauros", 13, None, 75, 100, 95, 40, 70, 110),
+  ("Magikarp", 18, None, 20, 10, 55, 15, 20, 80),
+  ("Gyarados", 18, 8, 95, 125, 79, 60, 100, 81),
+  ("Lapras", 18, 12, 130, 85, 80, 85, 95, 60),
+  ("Vaporeon", 18, None, 130, 65, 60, 110, 95, 65),
+  ("Flareon", 7, None, 65, 130, 60, 95, 110, 65),
+  ("Jolteon", 4, None, 65, 65, 60, 110, 95, 130),
+  ("Omastar", 16, 18, 70, 60, 125, 115, 70, 55),
+  ("Kabutops", 16, 18, 60, 115, 105, 65, 70, 80),
+  ("Aerodactyl", 16, 8, 80, 105, 65, 60, 75, 130),
+  ("Snorlax", 13, None, 160, 110, 65, 65, 110, 30),
+  ("Dragonite", 3, 8, 91, 134, 95, 100, 100, 80),
+] 
 conn.commit()
 conn.close()
           
